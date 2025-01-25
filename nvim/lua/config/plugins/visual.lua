@@ -1,14 +1,4 @@
-local barbecue = {
-   "utilyre/barbecue.nvim",
-   name = "barbecue",
-   dependencies = {
-      "SmiteshP/nvim-navic",
-      "nvim-tree/nvim-web-devicons",
-   },
-   opts = {},
-}
-
-local catppuccin = {
+return {
    "catppuccin/nvim",
    config = function()
       require("catppuccin").setup({
@@ -24,15 +14,4 @@ local catppuccin = {
       })
       vim.cmd("colorscheme catppuccin")
    end,
-}
-
-local dressing = {
-   "stevearc/dressing.nvim",
-   opts = {},
-}
-
-return {
-   barbecue,
-   catppuccin,
-   dressing,
 }

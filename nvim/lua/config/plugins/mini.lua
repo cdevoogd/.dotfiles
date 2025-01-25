@@ -1,14 +1,8 @@
 local M = {
    "echasnovski/mini.nvim",
    version = false,
-}
-
-local statusline = {
-   file_formats = {
-      unix = "LF",
-      dos = "CRLF",
-      mac = "CR",
-   },
+   -- statusline stores functions for configuring mini.statusline
+   statusline = {},
 }
 
 function M.enable_module(module, opts)
@@ -95,33 +89,44 @@ function M.enable_clue()
    })
 end
 
-function M.enable_statusline(args)
+function M.enable_statusline()
+   -- In the Git summary, just use the branch name and not the rest. This summary is used in the
+   -- Git section of the statusline.
+   vim.api.nvim_create_autocmd("User", {
+      pattern = "MiniGitUpdated",
+      callback = function(data)
+         local summary = vim.b[data.buf].minigit_summary
+         vim.b[data.buf].minigit_summary_string = summary.head_name or ""
+      end,
+   })
+
    M.enable_module("statusline", {
       set_vim_settings = false,
       content = {
-         active = statusline.active_content,
+         active = M.statusline.active_content,
       },
    })
+end
+
+function M.statusline.mini()
+   return require("mini.statusline")
 end
 
 -- Initially on mini's default statusline
 -- https://github.com/echasnovski/mini.statusline/blob/94d5e48415bdf872536e5812475fcf19e09f5c0e/lua/mini/statusline.lua#L609
 -- stylua: ignore
-function statusline.active_content()
-   local mini           = statusline.mini()
+function M.statusline.active_content()
+   local mini           = M.statusline.mini()
    local mode, mode_hl  = mini.section_mode({ trunc_width = 120 })
    local git            = mini.section_git({ trunc_width = 40 })
-   local diff           = mini.section_diff({ trunc_width = 75 })
    local diagnostics    = mini.section_diagnostics({ trunc_width = 75 })
-   local lsp            = statusline.section_lsp({ trunc_width = 75 })
    local filename       = mini.section_filename({ trunc_width = 140 })
-   local fileinfo       = statusline.section_fileinfo({ trunc_width = 100 })
-   local location       = statusline.section_location({ trunc_width = 75 })
+   local fileinfo       = M.statusline.section_fileinfo()
+   local location       = M.statusline.section_location()
 
-   local mode = string.upper(mode)
    return mini.combine_groups({
-      { hl = mode_hl,                  strings = { mode } },
-      { hl = "MiniStatuslineDevinfo",  strings = { git, diff, diagnostics, lsp } },
+      { hl = mode_hl,                  strings = { string.upper(mode) } },
+      { hl = "MiniStatuslineDevinfo",  strings = { git, diagnostics } },
       "%<", -- Mark general truncate point
       { hl = "MiniStatuslineFilename", strings = { filename } },
       "%=", -- End left alignment
@@ -130,23 +135,8 @@ function statusline.active_content()
    })
 end
 
--- https://github.com/echasnovski/mini.statusline/blob/94d5e48415bdf872536e5812475fcf19e09f5c0e/lua/mini/statusline.lua#L359
-function statusline.section_lsp(args)
-   local mini = statusline.mini()
-   if mini.is_truncated(args.trunc_width) then
-      return ""
-   end
-
-   if statusline.has_attached_lsp() then
-      return "󰰎"
-   end
-
-   return ""
-end
-
 -- https://github.com/echasnovski/mini.statusline/blob/94d5e48415bdf872536e5812475fcf19e09f5c0e/lua/mini/statusline.lua#L401
-function statusline.section_fileinfo(args)
-   local mini = statusline.mini()
+function M.statusline.section_fileinfo()
    local filetype = vim.bo.filetype
 
    -- Don't show anything if no filetype or not inside a "normal buffer"
@@ -154,29 +144,11 @@ function statusline.section_fileinfo(args)
       return ""
    end
 
-   if mini.is_truncated(args.trunc_width) then
-      return filetype
-   end
-
-   local format = statusline.file_formats[vim.bo.fileformat]
-   return string.format("%s [%s]", filetype, format)
+   return filetype
 end
 
-function statusline.section_location(args)
-   local mini = statusline.mini()
-   if mini.is_truncated(args.trunc_width) then
-      return "%l:%v"
-   end
-   return 'C%v:%-2{virtcol("$") - 1} L%l:%L'
-end
-
-function statusline.has_attached_lsp()
-   local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
-   return #clients > 0
-end
-
-function statusline.mini()
-   return require("mini.statusline")
+function M.statusline.section_location()
+   return "L%l C%v"
 end
 
 return M
