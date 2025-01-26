@@ -42,10 +42,6 @@ local function omap(key, cmd, opts)
    return map("o", key, cmd, opts)
 end
 
-local function smap(key, cmd, opts)
-   return map("s", key, cmd, opts)
-end
-
 -- Faster buffer navigation
 nmap("<C-h>", "<C-w>h")
 nmap("<C-j>", "<C-w>j")
@@ -73,11 +69,9 @@ vmap("y", "myy`y")
 vmap("Y", "myY`y")
 
 -- Shortcuts for copying to the system clipboard
--- Remap needs to be enabled to allow them to work with the keybinds above that prevent the cursor
--- position from being reset after yanking.
-nmap("<leader>y", '"+y', { desc = "copy to clipboard", remap = true })
-vmap("<leader>y", '"+y', { desc = "copy to clipboard", remap = true })
-nmap("<leader>Y", '"+yy', { desc = "copy line to clipboard", remap = true })
+nmap("<leader>y", '"+y', { desc = "copy to clipboard" })
+vmap("<leader>y", '"+y', { desc = "copy to clipboard" })
+nmap("<leader>Y", '"+yy', { desc = "copy line to clipboard" })
 
 -- https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
 -- Automatically reselect the last selection when using `<` and `>` to shift lines

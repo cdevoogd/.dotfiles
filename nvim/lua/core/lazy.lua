@@ -20,6 +20,12 @@ require("lazy").setup("core.plugins", {
    concurrency = vim.uv.available_parallelism() * 2,
    performance = {
       rtp = {
+         reset = false,
+         paths = {
+            -- Allow `~/.config/dots/nvim` to be used as a machine-specific runtime path
+            -- Snippets, ftplugins, etc can be added here.
+            vim.fn.expand("~/.config/dots/nvim"),
+         },
          disabled_plugins = {
             "netrwPlugin",
          },

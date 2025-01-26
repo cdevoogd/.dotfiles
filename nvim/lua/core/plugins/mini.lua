@@ -99,6 +99,7 @@ function M.enable_snippets()
       snippets = {
          -- Loads json and lua files from runtimepath's snippets subdir
          gen_loader.from_lang(),
+         gen_loader.from_runtime("global.{json,lua}"),
       },
    })
 end
