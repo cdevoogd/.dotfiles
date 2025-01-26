@@ -84,26 +84,6 @@ nmap("<leader>Y", '"+yy', { desc = "copy line to clipboard", remap = true })
 xmap(">", ">gv")
 xmap("<", "<gv")
 
-local function luasnip_next()
-   local ls = require("luasnip")
-   if ls.expand_or_jumpable() then
-      ls.expand_or_jump()
-   end
-end
-
-local function luasnip_prev()
-   local ls = require("luasnip")
-   if ls.jumpable(-1) then
-      ls.jump(-1)
-   end
-end
-
--- Snippet
-imap("<c-k>", luasnip_next, { desc = "snippet: jump to next" })
-smap("<c-k>", luasnip_next, { desc = "snippet: jump to next" })
-imap("<c-j>", luasnip_prev, { desc = "snippet: jump to previous" })
-smap("<c-j>", luasnip_prev, { desc = "snippet: jump to previous" })
-
 -- Files
 nmap("<leader>fe", "<cmd>Oil<cr>", { desc = "file explorer (oil) " })
 
@@ -113,11 +93,7 @@ nmap("<leader>bd", function()
 end, { desc = "delete current buffer" })
 
 -- g: git
-nmap("<leader>gc", "<cmd>Telescope git_commits<CR>", { desc = "view commits" })
-nmap("<leader>gC", "<cmd>Telescope git_bcommits<CR>", { desc = "view buffer commits" })
-nmap("<leader>gb", "<cmd>Telescope git_branches<CR>", { desc = "view branches" })
-nmap("<leader>gs", "<cmd>Telescope git_status<CR>", { desc = "view status" })
-nmap("<leader>gS", "<cmd>Telescope git_stash<CR>", { desc = "view stashes" })
+-- ap("<leader>gc", "<cmd>Telescope git_commits<CR>", { desc = "view commits" })
 
 -- s: search
 -- nmap("<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "search in buffer" })

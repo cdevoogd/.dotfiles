@@ -10,16 +10,19 @@ function M.enable_module(module, opts)
 end
 
 function M.config()
+   M.enable_module("bracketed")
    M.enable_module("bufremove")
    M.enable_module("comment")
    M.enable_module("diff")
    M.enable_module("git")
    M.enable_module("jump")
    M.enable_module("move")
-   M.enable_module("snippets")
+   M.enable_module("splitjoin")
+   M.enable_module("surround")
 
    M.enable_trailspace()
    M.enable_clue()
+   M.enable_snippets()
    M.enable_statusline()
 end
 
@@ -86,6 +89,16 @@ function M.enable_clue()
          { mode = "n", keys = "<Leader>c", desc = "+Code/LSP" },
          { mode = "n", keys = "<Leader>cg", desc = "+Goto" },
          { mode = "n", keys = "<Leader>cs", desc = "+Show" },
+      },
+   })
+end
+
+function M.enable_snippets()
+   local gen_loader = require("mini.snippets").gen_loader
+   M.enable_module("snippets", {
+      snippets = {
+         -- Loads json and lua files from runtimepath's snippets subdir
+         gen_loader.from_lang(),
       },
    })
 end
