@@ -44,7 +44,6 @@ function M.setup_conform()
 end
 
 function M.setup_language_servers()
-   local cmp_lsp = require("cmp_nvim_lsp")
    local language_servers = {
       ansiblels = {},
       bashls = {},
@@ -74,7 +73,7 @@ function M.setup_language_servers()
          "force",
          {},
          vim.lsp.protocol.make_client_capabilities(),
-         cmp_lsp.default_capabilities()
+         require("blink.cmp").get_lsp_capabilities()
       ),
    }
 
