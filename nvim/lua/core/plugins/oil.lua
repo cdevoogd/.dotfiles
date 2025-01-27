@@ -1,6 +1,6 @@
 local show_detailed_columns = false
-local undetailed_columns = {}
-local detailed_columns = { "permissions", "size" }
+local undetailed_columns = { "icon" }
+local detailed_columns = { "icon", "permissions", "size" }
 return {
    "stevearc/oil.nvim",
    lazy = false,
