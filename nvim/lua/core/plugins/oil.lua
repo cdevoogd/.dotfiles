@@ -10,6 +10,11 @@ return {
       lsp_file_methods = {
          autosave_changes = true,
       },
+      view_options = {
+         is_hidden_file = function(name, _)
+            return vim.startswith(name, ".") or vim.endswith(name, ".o") or name == "node_modules"
+         end,
+      },
       keymaps = {
          ["q"] = "actions.close",
          ["gd"] = {

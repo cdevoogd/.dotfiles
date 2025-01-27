@@ -66,7 +66,8 @@ xmap("<", "<gv")
 
 -- Find/Files
 nmap("<leader>fe", "<cmd>Oil<cr>", { desc = "file explorer (oil) " })
-nmap("<leader>ff", function() Snacks.picker.files() end, { desc = "files" })
+nmap("<leader>ff", function() require("core.plugins.snacks").project_files() end, { desc = "project files" })
+nmap("<leader>fF", function() Snacks.picker.files() end, { desc = "all files" })
 nmap("<leader>fg", function() Snacks.picker.git_files() end, { desc = "git files" })
 nmap("<leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
 nmap("<leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
