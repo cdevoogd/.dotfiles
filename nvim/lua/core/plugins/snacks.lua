@@ -11,7 +11,29 @@ local M = {
          -- https://github.com/folke/snacks.nvim/discussions/332
          indent = { enabled = false },
       },
-      picker = { enabled = true },
+      picker = {
+         enabled = true,
+         layouts = {
+            fullscreen = {
+               fullscreen = true,
+               layout = {
+                  backdrop = false,
+                  box = "vertical",
+                  border = "rounded",
+                  title = "{title} {live} {flags}",
+                  title_pos = "center",
+                  { win = "input", height = 1, border = "bottom" },
+                  { win = "list", border = "none" },
+                  { win = "preview", title = "{preview}", height = 0.5, border = "top" },
+               },
+            },
+         },
+         layout = function(source)
+            if vim.endswith(source, "files") then return "fullscreen" end
+            if source == "grep" then return "fullscreen" end
+            return vim.o.columns >= 120 and "default" or "vertical"
+         end,
+      },
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
    },
