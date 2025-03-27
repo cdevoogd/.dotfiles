@@ -29,7 +29,7 @@ function M.setup()
         desc = "Highlight text when yanked",
         pattern = "*",
         callback = function()
-            require("vim.highlight").on_yank({ timeout = 200 })
+            vim.hl.on_yank({ timeout = 200 })
         end,
     })
 
