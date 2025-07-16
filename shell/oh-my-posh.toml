@@ -27,6 +27,13 @@ final_space = true
       style = 'full'
 
   [[blocks.segments]]
+    template = '{{ if .Venv }} (venv){{ end }}'
+    foreground = 'yellow'
+    background = 'transparent'
+    type = 'python'
+    style = 'plain'
+
+  [[blocks.segments]]
     foreground = 'p:grey'
     background = 'transparent'
     type = 'git'
