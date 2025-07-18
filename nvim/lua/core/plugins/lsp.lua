@@ -11,10 +11,10 @@ local M = {
 }
 
 function M.config()
-    require("fidget").setup()
+    require("fidget").setup({})
     M.setup_conform()
     require("mason").setup()
-    require("mason-lspconfig").setup({ automatic_installation = true })
+    require("mason-lspconfig").setup({ automatic_installation = true, automatic_enable = false })
     require("mason-tool-installer").setup({
         -- Conform doesn't have automatic installation like null-ls did, so for now I'm
         -- explicitly listing out the formatters configured with conform.
