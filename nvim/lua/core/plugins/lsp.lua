@@ -29,6 +29,8 @@ function M.setup_conform()
         formatters_by_ft = {
             lua = { "stylua" },
             go = { "goimports" },
+            javascript = { "prettierd", "prettier", stop_after_first = true },
+            typescript = { "prettierd", "prettier", stop_after_first = true },
         },
     })
 
@@ -47,6 +49,7 @@ function M.setup_language_servers()
         },
         cssls = {},
         dockerls = {},
+        eslint = {},
         golangci_lint_ls = {},
         gopls = {},
         html = {},
