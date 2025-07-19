@@ -40,6 +40,7 @@ local parsers_to_install = {
     "rust",
     "sql",
     "toml",
+    "vim",
     "vimdoc",
     "yaml",
 }
