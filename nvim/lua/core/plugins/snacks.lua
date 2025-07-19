@@ -7,11 +7,6 @@ local config = {
         indent = { enabled = false },
     },
     input = { enabled = true },
-    formatters = {
-        file = {
-            truncate = 1000,
-        },
-    },
     picker = {
         enabled = true,
         layouts = {
@@ -73,7 +68,9 @@ local M = {
             -- This seciton is based on the 'align' option from this snacks.nvim PR
             -- https://github.com/folke/snacks.nvim/pull/743
             local picker = Snacks.picker.get()
-            len = vim.api.nvim_win_get_width(picker[1].list.win.win) - 5
+            if #picker > 0 then
+                len = vim.api.nvim_win_get_width(picker[1].list.win.win) - 5
+            end
 
             local tw = vim.api.nvim_strwidth(path)
             if tw > len then
