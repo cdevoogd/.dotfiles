@@ -74,10 +74,6 @@ nmap("<leader>Y", '"+yy', { desc = "copy line to clipboard" })
 xmap(">", ">gv")
 xmap("<", "<gv")
 
-nmap("<leader>,", function()
-    require("core.commands").command_list_picker()
-end, { desc = "command list" })
-
 nmap("<leader>e", "<cmd>Oil<cr>", { desc = "file explorer" })
 
 -- Find (pickers)
