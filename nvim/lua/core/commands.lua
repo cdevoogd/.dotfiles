@@ -36,6 +36,30 @@ function M.register_user_commands()
                 require("mini.trailspace").trim_last_lines()
             end,
         },
+        {
+            name = "GoTest",
+            cmd = function()
+                require("core.custom.go").test()
+            end,
+        },
+        {
+            name = "GoTestAll",
+            cmd = function()
+                require("core.custom.go").test_all()
+            end,
+        },
+        {
+            name = "GoTestFile",
+            cmd = function()
+                require("core.custom.go").test_file()
+            end,
+        },
+        {
+            name = "GoTestFunc",
+            cmd = function()
+                require("core.custom.go").test_func()
+            end,
+        },
     }
 
     for _, c in ipairs(commands) do
