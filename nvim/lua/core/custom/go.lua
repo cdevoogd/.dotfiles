@@ -3,9 +3,6 @@
 -- The specific commit was a665d79ba394e4bc7398c866ca603ebddae28641
 local M = {}
 
-local test_timeout = "30s"
-local test_flags = { "-v" }
-
 local function show_warning(prefix, msg)
     vim.api.nvim_echo({ { prefix, "WarningMsg" }, { " " .. msg } }, true, {})
 end
@@ -22,10 +19,12 @@ local function go_exists()
     return exists
 end
 
-local function build_args(args)
-    table.insert(args, string.format("-timeout=%s", test_timeout))
-    for _, f in ipairs(test_flags) do
-        table.insert(args, f)
+local function build_args(args, opts)
+    opts = opts or {}
+
+    table.insert(args, "-timeout=30s")
+    if opts.verbose then
+        table.insert(args, "-v")
     end
 
     -- Redirect stderr to stdout so neovim won't crash (crispgm/nvim-go #12)
@@ -80,60 +79,56 @@ local function do_test(prefix, cmd)
     vim.fn.jobstart(cmd, opts)
 end
 
-function M.test()
+function M.test(opts)
     if not go_exists() then
         return
     end
 
     local prefix = "GoTest"
     local cmd = { "go", "test" }
-    do_test(prefix, build_args(cmd))
+    do_test(prefix, build_args(cmd, opts))
 end
 
-function M.test_all()
+function M.test_all(opts)
     if not go_exists() then
         return
     end
 
     local prefix = "GoTestAll"
     local cmd = { "go", "test", "./..." }
-    do_test(prefix, build_args(cmd))
+    do_test(prefix, build_args(cmd, opts))
 end
 
-function M.test_func(opt)
+function M.test_func(opts)
     if not go_exists() then
         return
     end
 
     local prefix = "GoTestFunc"
     local func_name = ""
-    -- this is not available now actually
-    if opt and opt.func then
-        func_name = opt.func
-    else
-        local line = vim.fn.search([[func \(Test\|Example\)]], "bcnW")
-        if line == 0 then
-            show_error(prefix, string.format("Test func not found: %s", func_name))
-            return
-        end
-        local cur_line = vim.fn.getline(line)
-        func_name = split_file_name(cur_line)
-        if not valid_func_name(func_name) then
-            show_error("GoTestFunc", string.format("Invalid test func: %s", func_name))
-            return
-        end
-        func_name = vim.fn.shellescape(string.format("^%s$", func_name))
+    local line = vim.fn.search([[func \(Test\|Example\)]], "bcnW")
+    if line == 0 then
+        show_error(prefix, string.format("Test func not found: %s", func_name))
+        return
     end
+    local cur_line = vim.fn.getline(line)
+    func_name = split_file_name(cur_line)
+    if not valid_func_name(func_name) then
+        show_error("GoTestFunc", string.format("Invalid test func: %s", func_name))
+        return
+    end
+    func_name = vim.fn.shellescape(string.format("^%s$", func_name))
+
     local cmd = {
         "go",
         "test",
         "-run",
         func_name,
     }
-    do_test(prefix, build_args(cmd))
+    do_test(prefix, build_args(cmd, opts))
 end
 
-function M.test_file()
+function M.test_file(opts)
     if not go_exists() then
         return
     end
@@ -160,7 +155,7 @@ function M.test_file()
         "-run",
         vim.fn.shellescape(string.format("^%s$", table.concat(func_names, "|"))),
     }
-    do_test(prefix, build_args(cmd))
+    do_test(prefix, build_args(cmd, opts))
 end
 
 function M.show_output(lines)

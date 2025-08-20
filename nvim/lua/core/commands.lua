@@ -5,26 +5,30 @@ local utils = require("core.utils")
 local top_level_commands = {
     {
         name = "GoTest",
-        cmd = function()
-            require("core.custom.go").test()
+        nargs = "?",
+        cmd = function(opts)
+            require("core.custom.go").test({ verbose = opts.args == "verbose" })
         end,
     },
     {
         name = "GoTestAll",
-        cmd = function()
-            require("core.custom.go").test_all()
+        nargs = "?",
+        cmd = function(opts)
+            require("core.custom.go").test_all({ verbose = opts.args == "verbose" })
         end,
     },
     {
         name = "GoTestFile",
-        cmd = function()
-            require("core.custom.go").test_file()
+        nargs = "?",
+        cmd = function(opts)
+            require("core.custom.go").test_file({ verbose = opts.args == "verbose" })
         end,
     },
     {
         name = "GoTestFunc",
-        cmd = function()
-            require("core.custom.go").test_func()
+        nargs = "?",
+        cmd = function(opts)
+            require("core.custom.go").test_func({ verbose = opts.args == "verbose" })
         end,
     },
 }
@@ -156,7 +160,7 @@ function M.register_user_commands()
     })
 
     for _, c in ipairs(top_level_commands) do
-        vim.api.nvim_create_user_command(c.name, c.cmd, { desc = c.desc })
+        vim.api.nvim_create_user_command(c.name, c.cmd, { desc = c.desc, nargs = c.nargs or 0 })
     end
 
    -- These commands allow you to handle multiple substitutions in a single command call using a
