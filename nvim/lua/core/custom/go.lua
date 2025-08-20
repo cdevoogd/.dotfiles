@@ -6,10 +6,6 @@ local M = {}
 local test_timeout = "30s"
 local test_flags = { "-v" }
 
-local function show_info(prefix, msg)
-    vim.api.nvim_echo({ { prefix }, { " " .. msg } }, true, {})
-end
-
 local function show_warning(prefix, msg)
     vim.api.nvim_echo({ { prefix, "WarningMsg" }, { " " .. msg } }, true, {})
 end
@@ -62,13 +58,9 @@ local function do_test(prefix, cmd)
                 table.insert(outputs, v)
             end
         end
+
         if #outputs > 0 then
-            local msg = table.concat(outputs, "\n")
-            if event == "stdout" then
-                show_info(prefix, msg)
-            elseif event == "stderr" then
-                show_error(prefix, msg)
-            end
+            M.show_output(outputs)
         end
     end
 
@@ -169,6 +161,27 @@ function M.test_file()
         vim.fn.shellescape(string.format("^%s$", table.concat(func_names, "|"))),
     }
     do_test(prefix, build_args(cmd))
+end
+
+function M.show_output(lines)
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+    vim.api.nvim_buf_set_keymap(buf, "n", "q", ":q!<cr>", { noremap = true, silent = true })
+
+    local width = math.floor(vim.o.columns * 0.8)
+    local height = math.floor(vim.o.lines * 0.8)
+    local row = math.floor((vim.o.lines - height) / 2)
+    local col = math.floor((vim.o.columns - width) / 2)
+
+    vim.api.nvim_open_win(buf, true, {
+        relative = "editor",
+        width = width,
+        height = height,
+        row = row,
+        col = col,
+        style = "minimal",
+        border = "rounded",
+    })
 end
 
 return M
