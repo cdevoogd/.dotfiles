@@ -14,7 +14,7 @@ brew "diff-so-fancy"
 brew "fish"
 brew "go"
 brew "gum"
-brew "oh-my-posh"
+brew "starship"
 
 # Neovim + plugin dependencies
 brew "neovim"
