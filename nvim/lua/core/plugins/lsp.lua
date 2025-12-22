@@ -66,6 +66,7 @@ local mason_lspconfig = {
             "pyright",
             "ruff",
             "sqlls",
+            "svelte",
             "ts_ls",
             "vimls",
         },
