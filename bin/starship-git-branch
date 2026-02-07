@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    exit 1
+fi
+
+branch_name="$(git branch --show-current 2> /dev/null)"
+if [[ "$branch_name" == "" ]]; then
+    exit 1
+elif [[ "$(git rev-parse --abbrev-ref '@{upstream}' 2> /dev/null)" == "" ]]; then
+    echo -n "$branch_name "
+else
+    echo -n "$branch_name"
+fi
