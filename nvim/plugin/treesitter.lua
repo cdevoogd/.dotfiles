@@ -1,5 +1,6 @@
 local max_jobs = vim.uv.available_parallelism()
 local parsers_to_install = {
+    "astro",
     "bash",
     "c",
     "cmake",

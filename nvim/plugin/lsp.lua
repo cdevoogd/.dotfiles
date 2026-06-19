@@ -48,6 +48,7 @@ require("mason-lspconfig").setup({
     automatic_enable = true,
     ensure_installed = {
         "ansiblels",
+        "astro",
         "bashls",
         "clangd",
         "cssls",
