@@ -34,7 +34,7 @@ require("conform").setup({
 })
 require("helm-ls").setup({
     conceal_templates = {
-        enabled = true, -- Replace templates with virtual text of their current value
+        enabled = false,
     },
     indent_hints = {
         enabled = true,
