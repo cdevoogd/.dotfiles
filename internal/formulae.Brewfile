@@ -10,8 +10,8 @@ brew "python3" unless system "python3 --version > /dev/null"
 brew "wget"
 
 # Dotfiles (including scripts in bin) dependencies
-brew "diff-so-fancy"
 brew "fish"
+brew "git-delta"
 brew "go"
 brew "gum"
 brew "starship"

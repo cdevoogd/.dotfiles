@@ -1,8 +1,8 @@
 vim.pack.add({
     -- Git
     "https://github.com/sindrets/diffview.nvim",
-    "https://github.com/tpope/vim-fugitive",
-    "https://github.com/tpope/vim-rhubarb",
+    "https://github.com/neogitorg/neogit",
+    "https://github.com/FabijanZulj/blame.nvim",
     -- LSP and Formatting
     "https://github.com/folke/lazydev.nvim",
     -- Utilities
@@ -15,7 +15,13 @@ vim.pack.add({
 })
 
 require("guess-indent").setup({})
-require("diffview").setup({ use_icons = false })
+require("neogit").setup({ integrations = { diffview = true } })
+require("blame").setup(nil)
+require("diffview").setup({
+    use_icons = false,
+    enhanced_diff_hl = true,
+    file_panel = { listing_style = "list" },
+})
 
 require("lazydev").setup({
     library = {
@@ -50,4 +56,4 @@ require("catppuccin").setup({
     end,
 })
 
-vim.cmd("colorscheme catppuccin")
+vim.cmd("colorscheme catppuccin-nvim")

@@ -118,6 +118,12 @@ local commands = {
         desc = "Check the health of vim.pack",
         command = "checkhealth vim.pack",
     },
+    GitConflicts = {
+        desc = "Load current Git conflicts into the quickfix list",
+        command = function()
+            require("internal-plugins.git").load_qflist_with_conflicts()
+        end,
+    },
 }
 
 for name, cmd in pairs(commands) do

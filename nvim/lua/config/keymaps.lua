@@ -42,12 +42,6 @@ end
 nmap("<C-u>", "<C-u>zz")
 nmap("<C-d>", "<C-d>zz")
 
--- Faster buffer navigation
-nmap("<C-h>", "<C-w>h")
-nmap("<C-j>", "<C-w>j")
-nmap("<C-k>", "<C-w>k")
-nmap("<C-l>", "<C-w>l")
-
 -- Resize window using shift + arrow keys
 nmap("<S-Up>", ":resize +2<CR>")
 nmap("<S-Down>", ":resize -2<CR>")
@@ -101,32 +95,15 @@ end, { desc = "delete current buffer" })
 nmap("<leader>bz", "<C-w>T", { desc = "zoom current buffer (move to tab)" })
 
 -- g: git
-nmap("<leader>gd", function()
-    Snacks.picker.git_diff()
-end, { desc = "git diff" })
-nmap("<leader>gl", function()
-    Snacks.picker.git_log_file()
-end, { desc = "git log" })
-nmap("<leader>gs", function()
-    Snacks.picker.git_status()
-end, { desc = "git status" })
-nmap("<leader>gb", ":G blame<cr>", { desc = "blame file" })
-nmap("<leader>gro", ":.GBrowse<cr>", { desc = "open remote" })
-vmap("<leader>gro", ":GBrowse<cr>", { desc = "open remote" })
+nmap("<leader>gd", ":DiffviewOpen<cr>", { desc = "diff (diffview)" })
+nmap("<leader>gs", ":Neogit<cr>", { desc = "git status (neogit)" })
+nmap("<leader>gb", ":BlameToggle<cr>", { desc = "blame file" })
+map({ "n", "v" }, "<leader>gro", function()
+    require("internal-plugins.git").open_current_branch()
+end, { desc = "open remote (current branch)" })
 map({ "n", "v" }, "<leader>grd", function()
-    local cmd = vim.system({ "git", "symbolic-ref", "refs/remotes/origin/HEAD" }, { text = true }):wait()
-    if cmd.code ~= 0 then
-        require("utils").error("Failed to execute git to determine the default branch")
-        return nil
-    end
-    local parts = vim.split(cmd.stdout, "/")
-    local def_branch_name = string.gsub(parts[4], "%s+", "")
-    local cursor_line = vim.fn.line(".")
-    local visual_end_line = vim.fn.line("v")
-    local range_start = math.min(cursor_line, visual_end_line)
-    local range_end = math.max(cursor_line, visual_end_line)
-    vim.cmd(string.format(":%d,%dGBrowse %s:%%", range_start, range_end, def_branch_name))
-end, { desc = "open remote on default branch" })
+    require("internal-plugins.git").open_default_branch()
+end, { desc = "open remote (default branch)" })
 
 -- x: diagnostics & errors
 nmap("<leader>xf", function()

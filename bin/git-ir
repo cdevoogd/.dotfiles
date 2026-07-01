@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# We want to use the formatting from the git ll alias, but:
+# - We can limit the number of entries since we really shouldn't be doing an interactive rebase
+#   *that* far back.
+# - We want to disable the graph part of the `ll` alias since it makes it more difficult to parse
+#   out the commit hash.
+# - We can force color all of the time so that the logs still show up colored in the fzf window.
+#   By default git will disable the color since the output is being piped.
+commit="$(git ll -n 100 --color=always --no-graph | fzf --ansi --reverse --height ~20 | awk '{print $1}')"
+if [[ -z "$commit" ]]; then
+    echo "No commit was selected. Aborting interactive rebase."
+    exit
+fi
+
+echo "Starting an interactive rebase back to commit $commit"
+git rebase --interactive "$commit^" "$@"

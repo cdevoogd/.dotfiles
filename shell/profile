@@ -16,13 +16,29 @@
 #   separate profile means that I can set up other shells to also load this environment to ensure
 #   apps that encounter this issue still have the correct environment.
 
-# Prepends a directory to PATH. If the directory is already in PATH, it will not be added.
+# Prepends a directory to PATH. If the directory is already in PATH, it will be removed and
+# prepended again.
 prepend_path() {
     dir="$1"
-    case ":$PATH:" in
-        *":$dir:"*) ;;
-        *) PATH="$dir${PATH:+":$PATH"}" ;;
-    esac
+    remove_from_path "$dir"
+    PATH="$dir${PATH:+:$PATH}"
+}
+
+remove_from_path() {
+    dir="$1"
+    new_path=""
+
+    old_IFS="$IFS"
+    IFS=":"
+    set -- $PATH
+    IFS=$old_IFS
+
+    for path_dir in "$@"; do
+        [ "$path_dir" = "$dir" ] && continue
+        new_path="${new_path:+$new_path:}$path_dir"
+    done
+
+    PATH="$new_path"
 }
 
 # $0 is not the path of the profile, so it can't be used to find the path to the dotfiles repository
@@ -47,13 +63,8 @@ case $(uname) in
         export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew"
         ;;
     Darwin)
-        if [ "$(uname -m)" = "x86_64" ]; then
-            export HOMEBREW_PREFIX="/usr/local"
-            export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew"
-        else
-            export HOMEBREW_PREFIX="/opt/homebrew"
-            export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX"
-        fi
+        export HOMEBREW_PREFIX="/opt/homebrew"
+        export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX"
         ;;
 esac
 

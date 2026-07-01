@@ -7,6 +7,7 @@
 [alias]
     amend = commit --amend
     desc = branch --edit-description
+    detach = "!f(){ git checkout $(git rev-parse HEAD); }; f"
     hash = rev-parse --short HEAD
     last = log -1 HEAD --stat
     lg = log --graph --all --pretty=format:'%C(magenta)%h %C(white) %an  %ar%C(blue)  %D%n%s%n'
@@ -19,7 +20,7 @@
 
 [blame]
     coloring = highlightRecent
-    date = relative
+    date = human
 
 [color]
     ui = true
@@ -40,24 +41,46 @@
 
 [core]
     editor = nvim
+    pager = delta
     whitespace = error
 
+[delta]
+    # Catppuccin Mocha theme: https://github.com/catppuccin/delta
+    dark = true
+    syntax-theme = Catppuccin Mocha
+    blame-palette = "#1e1e2e #181825 #11111b #313244 #45475a"
+    commit-decoration-style = "#6c7086" bold box ul
+    file-decoration-style = "#6c7086"
+    file-style = "#cdd6f4"
+    hunk-header-decoration-style = "#6c7086" box ul
+    hunk-header-file-style = bold
+    hunk-header-line-number-style = bold "#a6adc8"
+    hunk-header-style = file line-number syntax
+    line-numbers-left-style = "#6c7086"
+    line-numbers-minus-style = bold "#f38ba8"
+    line-numbers-plus-style = bold "#a6e3a1"
+    line-numbers-right-style = "#6c7086"
+    line-numbers-zero-style = "#6c7086"
+    minus-emph-style = bold syntax "#694559"
+    minus-style = syntax "#493447"
+    plus-emph-style = bold syntax "#4e6356"
+    plus-style = syntax "#394545"
+    map-styles = \
+        bold purple => syntax "#5b4e74", \
+        bold blue => syntax "#445375", \
+        bold cyan => syntax "#446170", \
+        bold yellow => syntax "#6b635b"
+
 [diff]
+    algorithm = histogram
     colorMoved = default
     context = 3
     interHunkContext = 10
     renames = copies
     tool = nvimdiff
 
-[difftool]
-    prompt = false
-    trustExitCode = true
-
-[difftool "nvimdiff"]
-    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
-
 [interactive]
-    diffFilter = diff-so-fancy --patch
+    diffFilter = delta --color-only
 
 [log]
     abbrevCommit = true
@@ -66,11 +89,9 @@
 [merge]
     conflictStyle = zdiff3
 
-[mergetool]
-    keepBackup = false
-
-[pager]
-    diff = diff-so-fancy | less --tabs=4 -RF
+[rerere]
+    enabled = true
+    autoupdate = true
 
 [status]
     branch = true
@@ -78,4 +99,9 @@
     showUntrackedFiles = all
 
 [url "git@github.com:"]
+    # Allow cloning a repo like `gh:user/repo`
     insteadOf = "gh:"
+    # If a repo was cloned with https, use SSH to push instead. I use pushInsteadOf over insteadOf
+    # here, because I don't want pulling to require an SSH key to be set up just to pull. If I'm
+    # actively commiting and pushing, I should have one set up by then though.
+    pushInsteadOf = "https://github.com/"
