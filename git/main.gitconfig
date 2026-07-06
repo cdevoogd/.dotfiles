@@ -45,6 +45,7 @@
     whitespace = error
 
 [delta]
+    true-color = always
     # Catppuccin Mocha theme: https://github.com/catppuccin/delta
     dark = true
     syntax-theme = Catppuccin Mocha
