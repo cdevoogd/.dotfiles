@@ -72,6 +72,25 @@ require("mason-lspconfig").setup({
     },
 })
 
+-- ansiblels only attaches to the yaml.ansible file type, so this tries to convert yaml files that
+-- are in normal Ansible directories to that file type.
+local ansible_dirs = { "playbook", "roles", "tasks" }
+local function yaml_filetype(path)
+    for _, dir in ipairs(ansible_dirs) do
+        if string.match(path, dir) then
+            return "yaml.ansible"
+        end
+    end
+    return "yaml"
+end
+
+vim.filetype.add({
+    extension = {
+        yml = yaml_filetype,
+        yaml = yaml_filetype,
+    },
+})
+
 -- Ensure formatters are installed via Mason. This runs in the background to avoid blocking startup.
 local registry = require("mason-registry")
 registry.refresh(vim.schedule_wrap(function()
