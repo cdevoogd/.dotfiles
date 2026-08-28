@@ -1,7 +1,6 @@
 # Personal tools
 tap "cdevoogd/tap", trusted: true
 brew "cdevoogd/tap/notify"
-brew "cdevoogd/tap/git-branches"
 
 # Basic tools
 brew "git"

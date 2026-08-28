@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+red="\x1b[31m"
+bold="\x1b[1m"
+reset="\x1b[0m"
+
+max_list_height=${MAX_LIST_HEIGHT:-20}
+
+extract_branch_names() {
+    awk '{ print ($1 == "*" || $1 == "+") ? $2 : $1 }'
+}
+
+prompt_for_branches() {
+    git branch --color=always \
+        | fzf --ansi --height "~${max_list_height}" --layout reverse "$@" \
+        | extract_branch_names
+}
+
+handle_checkout() {
+    local branch=""
+    branch="$(prompt_for_branches --prompt "Checkout > ")"
+
+    if [[ -z "$branch" ]]; then
+        echo "No branch was selected"
+        return
+    fi
+
+    git checkout "$branch"
+}
+
+handle_delete() {
+    local branches=()
+    while IFS= read -r branch; do
+        branches+=("$branch")
+    done < <(prompt_for_branches --prompt "Delete > " --multi --marker 'x ')
+
+    if (( ${#branches[@]} == 0 )); then
+        echo "No branches were selected"
+        return
+    fi
+
+    echo -e "${bold}Branches to ${red}delete${reset}:"
+    printf "  %s\n" "${branches[@]}"
+    echo
+    read -rp "[y/N] > " answer
+    if [[ "$answer" != "y" ]]; then
+        echo "Canceled"
+        return
+    fi
+
+    git branch --delete --force "${branches[@]}"
+}
+
+main() {
+    case "${1:-"view"}" in
+        "view") prompt_for_branches;;
+        "checkout" | "co") handle_checkout;;
+        "delete" | "del") handle_delete;;
+        *) echo "Unknown command: $1" >&2; exit 1;;
+    esac
+}
+
+main "$@"
