@@ -183,20 +183,20 @@ function M.setup()
             local buf = o.buf
 
             vim.api.nvim_buf_create_user_command(buf, "GoTest", function(opts)
-                M.test({ verbose = opts.args == "verbose" })
-            end, { nargs = "?" })
+                M.test({ verbose = opts.bang })
+            end, { nargs = 0, bang = true })
 
             vim.api.nvim_buf_create_user_command(buf, "GoTestAll", function(opts)
-                M.test_all({ verbose = opts.args == "verbose" })
-            end, { nargs = "?" })
+                M.test_all({ verbose = opts.bang })
+            end, { nargs = 0, bang = true })
 
             vim.api.nvim_buf_create_user_command(buf, "GoTestFile", function(opts)
-                M.test_file({ verbose = opts.args == "verbose" })
-            end, { nargs = "?" })
+                M.test_file({ verbose = opts.bang })
+            end, { nargs = 0, bang = true })
 
             vim.api.nvim_buf_create_user_command(buf, "GoTestFunc", function(opts)
-                M.test_func({ verbose = opts.args == "verbose" })
-            end, { nargs = "?" })
+                M.test_func({ verbose = opts.bang })
+            end, { nargs = 0, bang = true })
         end,
     })
 end
