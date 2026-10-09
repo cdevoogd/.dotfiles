@@ -28,6 +28,9 @@ end
 local function imap(key, cmd, opts)
     return map("i", key, cmd, opts)
 end
+local function tmap(key, cmd, opts)
+    return map("t", key, cmd, opts)
+end
 local function vmap(key, cmd, opts)
     return map("v", key, cmd, opts)
 end
@@ -159,3 +162,6 @@ nmap("<leader>ca", vim.lsp.buf.code_action, { desc = "code action" })
 nmap("<leader>cr", vim.lsp.buf.rename, { desc = "rename symbol" })
 nmap("<leader>cS", vim.lsp.buf.signature_help, { desc = "signature help" })
 imap("<A-s>", vim.lsp.buf.signature_help, { desc = "signature help" })
+
+-- Use escape to exit terminal mode
+tmap("<Esc>", "<C-\\><C-n>")
