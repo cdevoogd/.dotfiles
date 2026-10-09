@@ -7,12 +7,10 @@ vim.pack.add({
     "https://github.com/qvalentin/helm-ls.nvim",
 })
 
-local js_formatters = { "oxfmt", "prettierd", "prettier", stop_after_first = true }
+local js_formatters = { "prettierd", "prettier", stop_after_first = true }
 local formatters_by_ft = {
     lua = { "stylua" },
     go = { "goimports" },
-    json = { "oxfmt", lsp_format = "fallback", stop_after_first = true },
-    html = { "oxfmt", lsp_format = "fallback", stop_after_first = true },
     javascript = js_formatters,
     typescript = js_formatters,
     javascriptreact = js_formatters,
@@ -24,13 +22,6 @@ require("mason").setup({})
 require("conform").setup({
     default_format_opts = { lsp_format = "never", timeout_ms = 3000 },
     formatters_by_ft = formatters_by_ft,
-    formatters = {
-        oxfmt = {
-            -- Only use oxfmt if the config file exists. In the future I could check package.json.
-            require_cwd = true,
-            cwd = require("conform.util").root_file({ ".oxlintrc.json", "oxlint.config.ts" }),
-        },
-    },
 })
 require("helm-ls").setup({
     conceal_templates = {
@@ -52,7 +43,6 @@ require("mason-lspconfig").setup({
         "bashls",
         "clangd",
         "cssls",
-        "denols",
         "dockerls",
         "eslint",
         "golangci_lint_ls",
@@ -61,7 +51,6 @@ require("mason-lspconfig").setup({
         "html",
         "jsonls",
         "lua_ls",
-        "oxlint",
         "ruff",
         "sqlls",
         "svelte",
