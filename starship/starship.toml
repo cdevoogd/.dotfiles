@@ -3,6 +3,7 @@
 
 add_newline = true
 format = """
+$hostname\
 $directory\
 $python\
 $git_branch\
@@ -37,6 +38,10 @@ style = "grey"
 
 [git_status]
 style = "grey"
+
+[hostname]
+ssh_only = true
+ssh_symbol = ''
 
 [python]
 format = '[(\($virtualenv\) )]($style)'
