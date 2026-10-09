@@ -84,7 +84,7 @@ local commands = {
     },
     ResetMarks = {
         desc = "Reset all marks",
-        command = [[delmarks a-zA-z0-9]],
+        command = [[delmarks a-zA-Z0-9]],
     },
     PackState = {
         desc = "Show the current state of vim.pack",
