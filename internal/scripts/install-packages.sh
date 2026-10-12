@@ -46,13 +46,6 @@ install_fonts() {
     install_brew_bundle "$FONTS_BREWFILE"
 }
 
-install_go_programs() {
-    # Go should be installed as a homebrew formula
-    log "Installing Go tools..."
-    go install golang.org/x/tools/cmd/goimports@latest
-    go install github.com/go-delve/delve/cmd/dlv@latest
-}
-
 main() {
     # The profile should have already been sourced by the install script which should have properly
     # set up PATH and other environment variables. As we install brew and brew formulae, we should
@@ -60,7 +53,6 @@ main() {
     ensure_brew
     install_formulae
     install_fonts
-    install_go_programs
 }
 
 main "$@"
