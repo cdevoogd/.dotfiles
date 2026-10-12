@@ -1,7 +1,7 @@
 font-size = 14
 font-family = ""
-font-family = "Berkeley Mono Nerd Font"
-font-family = "Akoni Nerd Font"
+font-family = "Ioskeley Mono"
+font-family = "Symbols Nerd Font Mono"
 # Disable ligatures
 font-feature = -calt
 font-feature = -liga

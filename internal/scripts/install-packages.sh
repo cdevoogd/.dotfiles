@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FORMULAE_BREWFILE="$SCRIPT_DIR/../formulae.Brewfile"
-CASKS_BREWFILE="$SCRIPT_DIR/../casks.Brewfile"
+FONTS_BREWFILE="$SCRIPT_DIR/../fonts.Brewfile"
 
 source "$SCRIPT_DIR/helpers.sh"
 
@@ -41,14 +41,9 @@ install_formulae() {
     install_brew_bundle "$FORMULAE_BREWFILE"
 }
 
-install_casks() {
-    if ! on_macos; then
-        log "Skipping installation of casks, not on macOS"
-        return
-    fi
-
-    log "Installing Homebrew casks..."
-    install_brew_bundle "$CASKS_BREWFILE"
+install_fonts() {
+    log "Installing fonts..."
+    install_brew_bundle "$FONTS_BREWFILE"
 }
 
 install_go_programs() {
@@ -64,7 +59,7 @@ main() {
     # be able to access them.
     ensure_brew
     install_formulae
-    install_casks
+    install_fonts
     install_go_programs
 }
 
